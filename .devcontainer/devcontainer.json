@@ -1,12 +1,9 @@
 {
   "name": "Hotels Merge API",
-  "dockerComposeFile": "docker-compose.yml",
+  "dockerComposeFile": "../docker-compose.yml",
   "service": "api",
   "workspaceFolder": "/workspace",
-  "extensions": [
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode"
-  ],
+  "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"],
   "settings": {
     "terminal.integrated.shell.linux": "/bin/bash"
   }
