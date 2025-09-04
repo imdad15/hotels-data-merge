@@ -38,7 +38,7 @@ export class PaperfliesAdapter extends BaseAdapter {
             description: img.caption,
           })),
         },
-        booking_conditions: h.booking_conditions || [],
+        bookingConditions: h.booking_conditions || [],
       }));
   }
 }

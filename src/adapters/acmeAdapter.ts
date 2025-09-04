@@ -1,35 +1,63 @@
+import logger from "../infrastructure/logger";
 import { BaseAdapter, SupplierConfig } from "./baseAdapter";
 import axios from "axios";
+import { Hotel } from "../types/hotel";
 
 export class AcmeAdapter extends BaseAdapter {
   constructor(config: SupplierConfig) {
     super(config);
   }
 
-  async fetchHotels() {
-    const { data } = await axios.get(this.config.url, { timeout: 5000 });
+  async fetchHotels(): Promise<Hotel[]> {
+    try {
+      const response = await axios.get<Array<Record<string, any>>>(this.config.url, { 
+        timeout: 5000 
+      });
+      
+      if (!response?.data || !Array.isArray(response.data)) {
+        logger.warn('Invalid response format from ACME API');
+        return [];
+      }
 
-    return data
-      .filter((h: any) => h.Name?.trim() && h.Address?.trim())
-      .map((h: any) => ({
-        id: h.Id,
-        destinationId: h.DestinationId,
-        name: h.Name.trim(),
-        location: {
-          address: h.Address.trim(),
-          city: h.City || "",
-          country: h.Country || "",
-          lat: h.Latitude || null,
-          lng: h.Longitude || null,
-        },
-        description: h.Description?.trim() || "",
-        amenities: {
-          general: Array.from(new Set(h.Facilities || [])),
-        },
-        images: {
-          rooms: [],
-          amenities: [],
-        },
-      }));
+      const hotels: Hotel[] = [];
+      
+      for (const item of response.data) {
+        try {
+          if (!item?.Name?.trim() || !item?.Address?.trim()) {
+            continue;
+          }
+          
+          const hotel: Hotel = {
+            id: String(item.Id || ''),
+            destinationId: Number(item.DestinationId) || 0,
+            name: String(item.Name).trim(),
+            location: {
+              address: String(item.Address).trim(),
+              city: item.City ? String(item.City) : "",
+              country: item.Country ? String(item.Country) : "",
+              lat: item.Latitude ? String(item.Latitude) : "",
+              lng: item.Longitude ? String(item.Longitude) : "",
+            },
+            description: item.Description ? String(item.Description) : "",
+            amenities: {
+              general: Array.isArray(item.Facilities) 
+                ? [...new Set(item.Facilities.map(f => String(f)))]
+                : [],
+            },
+          };
+          
+          hotels.push(hotel);
+        } catch (error) {
+          logger.error(`Error processing hotel data: ${error}`);
+          continue;
+        }
+      }
+      
+      return hotels;
+    } catch (err) {
+      const error = err as Error;
+      logger.error(`Failed to fetch hotels from ACME: ${error.message}`);
+      return [];
+    }
   }
 }

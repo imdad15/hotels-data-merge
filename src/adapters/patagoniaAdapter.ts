@@ -10,15 +10,15 @@ export class PatagoniaAdapter extends BaseAdapter {
     const { data } = await axios.get(this.config.url, { timeout: 5000 });
 
     return data
-      .filter((h: any) => h.name && h.address) // Filter out entries missing required fields
+      .filter((h: any) => h.name && h.address)
       .map((h: any) => ({
         id: h.id,
         destinationId: h.destination,
         name: h.name.trim(),
         location: {
           address: h.address ?? "",
-          lat: h.lat ?? null,
-          lng: h.lng ?? null,
+          lat: h.lat ? String(h.lat) : "",
+          lng: h.lng ? String(h.lng) : "",
         },
         description: h.info?.trim() ?? "",
         amenities: {

@@ -55,17 +55,16 @@ describe("PatagoniaAdapter", () => {
       expect(result).toEqual([
         {
           id: "iJhz",
-          destination_id: 5432,
+          destinationId: 5432,
           name: "Beach Villas Singapore",
           location: {
             address: "8 Sentosa Gateway, Beach Villas",
-            lat: 1.264751,
-            lng: 103.824898,
+            lat: "1.264751",
+            lng: "103.824898",
           },
           description: "Luxury beachfront villas with private pools.",
           amenities: {
             general: ["Pool", "Wifi", "Aircon", "TV", "Coffee machine"],
-            room: [],
           },
           images: {
             rooms: [
@@ -132,17 +131,16 @@ describe("PatagoniaAdapter", () => {
       expect(result).toHaveLength(1);
       expect(result[0]).toMatchObject({
         id: "valid1",
-        destination_id: 123,
+        destinationId: 123,
         name: "Valid Hotel",
         location: {
           address: "123 Test St",
-          lat: null,
-          lng: null,
+          lat: "",
+          lng: "",
         },
         description: "Test description",
         amenities: {
           general: [],
-          room: [],
         },
         images: {
           rooms: [],
