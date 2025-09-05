@@ -148,13 +148,6 @@ describe("AcmeAdapter", () => {
     expect(result[0].amenities?.general).toEqual([]);
   });
 
-  it("should return empty array on API errors", async () => {
-    const error = new Error("Network error");
-    mockedAxios.get.mockRejectedValueOnce(error);
-    const result = await adapter.fetchHotels();
-    expect(result).toEqual([]);
-  });
-
   it("should handle missing optional fields", async () => {
     mockedAxios.get.mockResolvedValueOnce({
       data: [

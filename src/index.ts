@@ -8,24 +8,24 @@ const port = process.env.PORT || 3000;
 async function startServer() {
   try {
     // Initialize Redis connection
-    logger.info('Initializing Redis connection...');
+    logger.info("Initializing Redis connection...");
     const redisInitialized = await initializeCache();
     if (!redisInitialized) {
-      logger.error('Failed to initialize Redis. Exiting...');
+      logger.error("Failed to initialize Redis. Exiting...");
       process.exit(1);
     }
 
     // Start the server
     app.listen(port, () => {
       logger.info(`Server running on http://localhost:${port}`);
-      
+
       // Initial data load
-      fetchAndCacheHotels().catch(err => {
-        logger.error({ err }, 'Failed during initial data load');
+      fetchAndCacheHotels().catch((err) => {
+        logger.error({ err }, "Failed during initial data load");
       });
     });
   } catch (err) {
-    logger.fatal({ err }, 'Failed to start server');
+    logger.fatal({ err }, "Failed to start server");
     process.exit(1);
   }
 }

@@ -1,11 +1,10 @@
-import { SUPPLIERS } from "../config/suppliers";
 import { cache } from "../infrastructure/cache";
 import logger from "../infrastructure/logger";
 import { mergeHotels } from "../services/hotelMergeService";
 import { AcmeAdapter } from "../adapters/acmeAdapter";
 import { PatagoniaAdapter } from "../adapters/patagoniaAdapter";
 import { PaperfliesAdapter } from "../adapters/paperfliesAdapter";
-import fetchAndCacheHotels from "./ingestHotels";
+import { fetchAndCacheHotels } from "./ingestHotels";
 
 jest.mock("../adapters/acmeAdapter");
 jest.mock("../adapters/patagoniaAdapter");
@@ -14,7 +13,7 @@ jest.mock("../services/hotelMergeService");
 jest.mock("../infrastructure/cache");
 jest.mock("../infrastructure/logger");
 
-describe("cron job fetchAndCacheHotels", () => {
+describe("fetchAndCacheHotels", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -29,7 +28,6 @@ describe("cron job fetchAndCacheHotels", () => {
     (PaperfliesAdapter as jest.Mock).mockImplementation(() => ({
       fetchHotels: jest.fn().mockResolvedValue([{ id: "paper1" }]),
     }));
-
     (mergeHotels as jest.Mock).mockReturnValue([
       { id: "merged1" },
       { id: "merged2" },
@@ -37,7 +35,7 @@ describe("cron job fetchAndCacheHotels", () => {
 
     const cacheSetSpy = jest.spyOn(cache, "set").mockResolvedValue();
 
-    await fetchAndCacheHotels();
+    const result = await fetchAndCacheHotels();
 
     expect(mergeHotels).toHaveBeenCalledWith([
       { supplier: "acme", hotels: [{ id: "acme1" }] },
@@ -48,9 +46,8 @@ describe("cron job fetchAndCacheHotels", () => {
       { id: "merged1" },
       { id: "merged2" },
     ]);
-    expect(logger.info).toHaveBeenCalledWith(
-      "Hotel data cached. Total: 2"
-    );
+    expect(logger.info).toHaveBeenCalledWith("Hotel data cached. Total: 2");
+    expect(result).toEqual([{ id: "merged1" }, { id: "merged2" }]);
   });
 
   it("logs an error if fetching fails", async () => {
@@ -59,10 +56,9 @@ describe("cron job fetchAndCacheHotels", () => {
     }));
     (mergeHotels as jest.Mock).mockReturnValue([]);
 
-    await fetchAndCacheHotels();
-
+    await expect(fetchAndCacheHotels()).rejects.toThrow("fail");
     expect(logger.error).toHaveBeenCalledWith(
-      expect.stringContaining("Failed to fetch hotels")
+      expect.stringContaining("Failed to fetch hotels"),
     );
   });
 });

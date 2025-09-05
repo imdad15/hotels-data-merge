@@ -5,10 +5,7 @@ module.exports = {
   transform: {
     "^.+\\.tsx?$": "ts-jest",
   },
-  testMatch: [
-    "**/*.test.ts",
-    "**/*.spec.ts"
-  ],
+  testMatch: ["**/*.test.ts", "**/*.spec.ts"],
   collectCoverageFrom: ["src/**/*.{ts,tsx}"],
   coveragePathIgnorePatterns: [
     "/node_modules/",
@@ -17,6 +14,12 @@ module.exports = {
     "/src/server.ts",
     ".test.ts$",
     ".spec.ts$",
-    "index.ts"
+    "index.ts",
   ],
+  testTimeout: 10000, // 10 seconds
+  detectOpenHandles: true, // Helps identify unclosed handles
+  forceExit: true, // Force Jest to exit after tests complete
+  clearMocks: true,
+  resetModules: true,
+  restoreMocks: true,
 };

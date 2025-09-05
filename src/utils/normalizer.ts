@@ -7,7 +7,7 @@
 export function normalizeAmenity(input: string): string {
   return input
     .toLowerCase()
-    .replace(/[^\w\s\/-]/g, '')
-    .replace(/\s+/g, ' ')
+    .replace(/[^\w\s\/-]/g, "")
+    .replace(/\s+/g, " ")
     .trim();
 }

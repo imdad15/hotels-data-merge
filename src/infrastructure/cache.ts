@@ -19,20 +19,20 @@ export function initializeCache(): Promise<boolean> {
 
     redis.on("error", (err: NodeJS.ErrnoException) => {
       logger.error({ err }, "Redis connection error");
-      if (err.code === 'ECONNREFUSED') {
-        logger.fatal('Failed to connect to Redis. Make sure Redis is running.');
+      if (err.code === "ECONNREFUSED") {
+        logger.fatal("Failed to connect to Redis. Make sure Redis is running.");
         process.exit(1);
       }
     });
 
     // Graceful shutdown
-    process.on('SIGINT', async () => {
-      logger.info('Shutting down Redis connection...');
+    process.on("SIGINT", async () => {
+      logger.info("Shutting down Redis connection...");
       try {
         await redis.quit();
-        logger.info('Redis connection closed');
+        logger.info("Redis connection closed");
       } catch (err) {
-        logger.error({ err }, 'Error closing Redis connection');
+        logger.error({ err }, "Error closing Redis connection");
       }
       process.exit(0);
     });
@@ -45,7 +45,7 @@ export const cache = {
       const data = await redis.get(key);
       return data ? JSON.parse(data) : undefined;
     } catch (err) {
-      logger.error({ err }, 'Error fetching data from Redis');
+      logger.error({ err }, "Error fetching data from Redis");
       throw err;
     }
   },
@@ -54,7 +54,7 @@ export const cache = {
     try {
       await redis.set(key, JSON.stringify(value), "EX", ttl);
     } catch (err) {
-      logger.error({ err }, 'Error setting data in Redis');
+      logger.error({ err }, "Error setting data in Redis");
       throw err;
     }
   },

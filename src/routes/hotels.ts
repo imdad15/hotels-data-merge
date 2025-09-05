@@ -1,7 +1,7 @@
-import express from 'express';
-import { getHotels } from '../controllers/hotelController';
-import { query } from 'express-validator';
-import { validateRequest } from '../middleware/validateRequest';
+import express from "express";
+import { getHotels } from "../controllers/hotelController";
+import { query } from "express-validator";
+import { validateRequest } from "../middleware/validateRequest";
 
 const router = express.Router();
 
@@ -43,13 +43,13 @@ const router = express.Router();
  *         description: Server error
  */
 router.get(
-  '/',
+  "/",
   [
-    query('destination').optional().isString().trim().notEmpty(),
-    query('hotels').optional().isString().trim(),
-    validateRequest
+    query("destination").optional().isString().trim().notEmpty(),
+    query("hotels").optional().isString().trim(),
+    validateRequest,
   ],
-  getHotels
+  getHotels,
 );
 
 export default router;
