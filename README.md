@@ -63,6 +63,13 @@ A Node.js service that aggregates and merges hotel data from multiple suppliers 
 
 2. Run `docker compose up` to start the containers.
 
-OR
+### Using VS Code Dev Container
 
 Open the project in VS Code and open the dev container. Wait for the dev container to be built and start
+
+3. Use postman or browser to fetch data
+# Get hotels for a specific destination
+ "http://localhost:3000?destination=5432"
+
+# Get hotels for a specific destination and hotel ids
+ "http://localhost:3000?destination=5432&hotels=iJhz,SjyX"
