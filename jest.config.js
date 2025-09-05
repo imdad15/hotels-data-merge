@@ -10,5 +10,13 @@ module.exports = {
     "**/*.spec.ts"
   ],
   collectCoverageFrom: ["src/**/*.{ts,tsx}"],
-  coveragePathIgnorePatterns: ["/node_modules/", ".test.ts$", ".spec.ts$"],
+  coveragePathIgnorePatterns: [
+    "/node_modules/",
+    "/src/config/",
+    "/src/infrastructure/",
+    "/src/server.ts",
+    ".test.ts$",
+    ".spec.ts$",
+    "index.ts"
+  ],
 };
